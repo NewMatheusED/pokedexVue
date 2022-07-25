@@ -1,9 +1,13 @@
 <template>
-  <div v-bind:class = "(this.pokemonData.length == 0) ? 'show' : 'hide'" class="loading"></div>
-  <input type="text" placeholder="Id ou nome" v-model="pokemon">
-  <h1>Nome: {{pokemonData.name}}</h1>
-  <h2>Id: {{pokemonData.id}}</h2>
-  <button @click="getApiData">Get Data</button>
+  <div class="container">
+    <div class="loading hide"></div>
+    <div class="main">
+      <input type="text" placeholder="Id ou nome" v-model="pokemon">
+      <h1>Nome: {{pokemonData.name}}</h1>
+      <h2>Id: {{pokemonData.id}}</h2>
+      <button @click="getApiData">Get Data</button>
+    </div><!--main-->
+  </div><!--container-->
 </template>
 
 <script>
@@ -15,24 +19,43 @@
         pokemon: ''
         }
       },  
-
+ 
       methods: {
         async getApiData() {
+          const div1 = document.querySelector('.loading');
+          const div2 = document.querySelector('.main');
           try {
             if(this.pokemonData.length == 0) {
-              
+              div1.classList.add("show");
+              div1.classList.remove("hide");
+              div2.classList.add("hide");
+              div2.classList.remove("show");
             }
             let name = this.pokemon.toLowerCase();
             this.pokemonData = [];
             const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-
-            const data = await res.json();
-            this.pokemonData = data ;
-            this.pokemon = '';
+            if(res.status == 200) {
+              const data = await res.json();
+              this.pokemonData = data ;
+              this.pokemon = '';
+              if (this.pokemonData.length != 0) {
+                div1.classList.add("hide");
+                div1.classList.remove("show");
+                div2.classList.add("show");
+                div2.classList.remove("hide");
+              }
+            } else if (res.status == 404) {
+              this.pokemonData.name = 'Pokemon não encontrado'
+              div1.classList.add("hide");
+              div1.classList.remove("show");
+              div2.classList.add("show");
+              div2.classList.remove("hide");
+              this.pokemon = '';
+            }
 
           }
           catch(error) {
-            console.log(error)
+            console.log(error);
           }
         }
       },
