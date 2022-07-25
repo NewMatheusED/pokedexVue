@@ -24,6 +24,7 @@
         async getApiData() {
           const div1 = document.querySelector('.loading');
           const div2 = document.querySelector('.main');
+          this.pokemonData = [];
           try {
             if(this.pokemonData.length == 0) {
               div1.classList.add("show");
@@ -32,7 +33,6 @@
               div2.classList.remove("show");
             }
             let name = this.pokemon.toLowerCase();
-            this.pokemonData = [];
             const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
             if(res.status == 200) {
               const data = await res.json();
@@ -45,7 +45,8 @@
                 div2.classList.remove("hide");
               }
             } else if (res.status == 404) {
-              this.pokemonData.name = 'Pokemon não encontrado'
+              this.pokemonData.name = 'Pokemon não encontrado';
+              this.pokemonData.id = 'Error 404';
               div1.classList.add("hide");
               div1.classList.remove("show");
               div2.classList.add("show");
