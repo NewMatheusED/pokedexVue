@@ -4,8 +4,8 @@
     <div class="main">
       <input class="form-control input" type="text" placeholder="Id ou nome" v-model="pokemon">
       <img class='mainImg'/>
-      <h1 style="text-transform: capitalize;">Nome: {{pokemonData['name']}}</h1>
-      <h2>Id: {{pokemonData['id']}}</h2>
+      <h1 class="title hide" style="text-transform: capitalize;">Nome: {{pokemonData['name']}}</h1>
+      <h2 class="title hide">Id: {{pokemonData['id']}}</h2>
       <button class="btn btn-primary" @click="getApiData">Search</button>
       <button class="btn btn-secondary hide" style="margin-top: 10px" @click="__repeat">Pesquisar novamente</button>
     </div><!--main-->
@@ -30,15 +30,17 @@
           const input = document.querySelector('.input');
           const btn1 = document.querySelector('.btn-primary');
           const btn2 = document.querySelector('.btn-secondary');
+          const title = document.querySelectorAll('.title');
+
           this.pokemonData = [];
+
           div1.classList.add("show");
           div1.classList.remove("hide");
           div2.classList.add("hide");
           div2.classList.remove("show");
           btn1.classList.add("hide");
           btn1.classList.remove("show");
-          btn2.classList.add("show");
-          btn2.classList.remove("hide");
+
           try {
             if(this.pokemon === '') {
               alert('Preencher campo')
@@ -46,6 +48,7 @@
             }
             let name = this.pokemon.toLowerCase();
             const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+
             if(res.status == 200) { //se o pokemon existe
               const data = await res.json();
               this.pokemonData = data ;
@@ -57,6 +60,12 @@
                 div1.classList.remove("show");
                 div2.classList.add("show");
                 div2.classList.remove("hide");
+                btn2.classList.add("show");
+                btn2.classList.remove("hide");
+                title.forEach(el => {
+                  el.classList.add("show");
+                  el.classList.remove("hide");
+                });
               }
             } else if (res.status == 404) { //se o pokemon não existe
               this.pokemonData.name = 'Pokemon não encontrado';
@@ -86,7 +95,7 @@
   }
 </script>
 
-<style>
+<style>v
    .show {
     display: inline-block;
    }
