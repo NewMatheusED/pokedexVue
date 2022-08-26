@@ -1,17 +1,19 @@
 <template>
   <div class="container">
-    <div v-bind:class = "(this.pokemonData.length == 0) ? 'hide' : 'show'" class="loading"></div>
+    <div class="loading hide"></div>
     <div class="main">
-      <input class="form-control input" type="text" placeholder="Id ou nome" v-model="pokemon">
-      <button class="btn btn-primary" @click="getApiData">Search</button>
+      <div v-bind:class="(pokemonData.length == 0) ? 'show' : 'hide'" style="width: 100%; text-align: center">
+        <input class="form-control input" type="text" placeholder="Id ou nome" v-model="pokemon">
+        <button class="btn btn-primary" @click="getApiData">Search</button>
+      </div><!--first-->
       <div class="flexInfo">
         <h1 class="title" style="text-transform: capitalize;">{{pokemonData['name']}}&nbsp;</h1>
         <h2 v-if="pokemonData['id'] < 100" class="title">Nº0{{pokemonData['id']}}</h2>
         <h2 v-if="pokemonData['id'] > 100" class="title">Nº{{pokemonData['id']}}</h2>
       </div>
       <img class='mainImg'/>
-      <!-- <p>{{pokemonDataDescriptions.descriptions[7]}}</p> -->
-      <button class="btn btn-secondary hide" style="margin-top: 10px" @click="__repeat">Pesquisar novamente</button>
+      
+      <button v-bind:class="(pokemonData.length == 0) ? 'hide' : 'show'" class="btn btn-secondary" style="margin-top: 10px" @click="__repeat">Pesquisar novamente</button>
     </div><!--main-->
   </div><!--container-->
 </template>
@@ -39,8 +41,8 @@
 
           this.pokemonData = [];
 
-          // div1.classList.add("show");
-          // div1.classList.remove("hide");
+          div1.classList.add("show");
+          div1.classList.remove("hide");
           // div2.classList.add("hide");
           // div2.classList.remove("show");
           // btn1.classList.add("hide");
@@ -66,10 +68,6 @@
               if (this.pokemonData.length != 0) { 
                 div1.classList.add("hide");
                 div1.classList.remove("show");
-                div2.classList.add("show");
-                div2.classList.remove("hide");
-                btn2.classList.add("show");
-                btn2.classList.remove("hide");
                 // title.forEach(el => {
                 //   el.classList.add("show");
                 //   el.classList.remove("hide");
