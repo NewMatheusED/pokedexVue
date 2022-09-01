@@ -6,10 +6,12 @@
         <input class="form-control input" type="text" placeholder="Id ou nome" v-model="pokemon">
         <button class="btn btn-primary" @click="getApiData">Search</button>
       </div><!--first-->
-      <div class="flexInfo">
+      <div style="margin-bottom: -30px" class="flexInfo">
         <h1 class="title" style="text-transform: capitalize;">{{pokemonData['name']}}&nbsp;</h1>
         <h2 v-if="pokemonData['id'] < 100" class="title">Nº0{{pokemonData['id']}}</h2>
         <h2 v-if="pokemonData['id'] >= 100" class="title">Nº{{pokemonData['id']}}</h2>
+      </div><!--flexInfo-->
+      <div class="flexInfo">
         <button v-bind:class="(pokemonData.length == 0) ? 'hide' : 'show'" class="btn btn-secondary" @click="previous">Anterior</button>
         <button v-bind:class="(pokemonData.length == 0) ? 'hide' : 'show'" class="btn btn-secondary" @click="foward">Próximo</button>
       </div><!--flexInfo-->
@@ -167,6 +169,7 @@
    .flexInfo {
     display: flex;
     align-items: end;
+    margin-bottom: 50px;
 
    }
 
