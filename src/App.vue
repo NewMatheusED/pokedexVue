@@ -9,11 +9,13 @@
       <div class="flexInfo">
         <h1 class="title" style="text-transform: capitalize;">{{pokemonData['name']}}&nbsp;</h1>
         <h2 v-if="pokemonData['id'] < 100" class="title">Nº0{{pokemonData['id']}}</h2>
-        <h2 v-if="pokemonData['id'] > 100" class="title">Nº{{pokemonData['id']}}</h2>
-      </div>
+        <h2 v-if="pokemonData['id'] >= 100" class="title">Nº{{pokemonData['id']}}</h2>
+        <button v-bind:class="(pokemonData.length == 0) ? 'hide' : 'show'" class="btn btn-secondary" @click="previous">Anterior</button>
+        <button v-bind:class="(pokemonData.length == 0) ? 'hide' : 'show'" class="btn btn-secondary" @click="foward">Próximo</button>
+      </div><!--flexInfo-->
       <img class='mainImg'/>
       
-      <button v-bind:class="(pokemonData.length == 0) ? 'hide' : 'show'" class="btn btn-secondary" style="margin-top: 10px" @click="__repeat">Pesquisar novamente</button>
+      <button v-bind:class="(pokemonData.length == 0) ? 'hide' : 'show'" class="btn btn-secondary" style="margin-top: 10px; margin-bottom: 20px" @click="__repeat">Pesquisar novamente</button>
     </div><!--main-->
   </div><!--container-->
 </template>
@@ -24,8 +26,8 @@
     data() {
       return {
         pokemonData: [],
-        pokemonDataDescriptions: [],
-        pokemon: ''
+        pokemon: '',
+        id: 0,
         }
       },  
  
@@ -53,16 +55,14 @@
               alert('Preencher campo')
               window.location.reload();
             }
-            let name = this.pokemon.toLowerCase();
+            let name = this.pokemon
             const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-            const resDescription = await fetch(`https://pokeapi.co/api/v2/characteristic/${name}`)
 
             if(res.status == 200) { //se o pokemon existe
               const data = await res.json();
-              const description = await resDescription.json();
               this.pokemonData = data ;
               this.pokemon = '';
-              this.pokemonDataDescriptions = description;
+              this.id = this.pokemonData['id'];
               img.src = data['sprites']['versions']['generation-v']['black-white']['animated']['front_default'];
               input.classList.add("hide");
               if (this.pokemonData.length != 0) { 
@@ -94,6 +94,18 @@
 
         __repeat() {
           window.location.reload();
+        },
+
+        foward() {
+          this.id++;
+          this.pokemon = this.id;
+          this.getApiData();
+        },
+
+        previous() {
+          this.id--
+          this.pokemon = this.id;
+          this.getApiData();
         }
       },
 
