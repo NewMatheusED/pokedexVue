@@ -16,6 +16,7 @@
         <button v-bind:class="(pokemonData.length == 0) ? 'hide' : 'show'" class="btn btn-secondary" @click="foward">Próximo</button>
       </div><!--flexInfo-->
       <img class='mainImg'/>
+      <div class="typesInfo"></div>
       
       <button v-bind:class="(pokemonData.length == 0) ? 'hide' : 'show'" class="btn btn-secondary" style="margin-top: 10px; margin-bottom: 20px" @click="__repeat">Pesquisar novamente</button>
     </div><!--main-->
@@ -41,6 +42,7 @@
           const input = document.querySelector('.input');
           const btn1 = document.querySelector('.btn-primary');
           const btn2 = document.querySelector('.btn-secondary');
+          const typesInfo = document.querySelector('.typesInfo');
           // const title = document.querySelectorAll('.title');
 
           this.pokemonData = [];
@@ -67,6 +69,14 @@
               this.id = this.pokemonData['id'];
               img.src = data['sprites']['versions']['generation-v']['black-white']['animated']['front_default'];
               input.classList.add("hide");
+              if(this.pokemonData['types'].length = 1) {
+                typesInfo.innerHTML = this.pokemonData['types'][0]['type']['name']
+              }
+
+              if(this.pokemonData['types'].length = 2) {
+                typesInfo.innerHTML += this.pokemonData['types'][0]['type']['name']  
+                typesInfo.innerHTML += this.pokemonData['types'][1]['type']['name']
+              }
               if (this.pokemonData.length != 0) { 
                 div1.classList.add("hide");
                 div1.classList.remove("show");
@@ -101,12 +111,16 @@
         foward() {
           this.id++;
           this.pokemon = this.id;
+          document.querySelector('.mainImg').src = ''
+          document.querySelector('.typesInfo').innerHTML = ''
           this.getApiData();
         },
 
         previous() {
           this.id--
           this.pokemon = this.id;
+          document.querySelector('.mainImg').src = ''
+          document.querySelector('.typesInfo').innerHTML = ''
           this.getApiData();
         }
       },
