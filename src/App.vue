@@ -35,6 +35,14 @@
       },  
  
       methods: {
+
+        getColorType(type) {
+          switch (type) {
+            case 'grass': 
+
+          }
+        },
+
         async getApiData() {
           const div1 = document.querySelector('.loading');
           const div2 = document.querySelector('.main');
@@ -69,22 +77,37 @@
               this.id = this.pokemonData['id'];
               img.src = data['sprites']['versions']['generation-v']['black-white']['animated']['front_default'];
               input.classList.add("hide");
-              if(this.pokemonData['types'].length = 1) {
-                typesInfo.innerHTML = this.pokemonData['types'][0]['type']['name']
-              }
 
-              if(this.pokemonData['types'].length = 2) {
-                typesInfo.innerHTML += this.pokemonData['types'][0]['type']['name']  
-                typesInfo.innerHTML += this.pokemonData['types'][1]['type']['name']
-              }
-              if (this.pokemonData.length != 0) { 
+              if(this.pokemonData['types'].length == 1) {
+                document.createElement("div1")
+                let type1 = this.pokemonData['types'][0]['type']['name']
+                typesInfo.innerHTML = type1;
                 div1.classList.add("hide");
                 div1.classList.remove("show");
+                
+              }
+
+              if(this.pokemonData['types'].length == 2) {
+                let first = document.createElement("div");
+                let second = document.createElement("div");
+                first.setAttribute("class", "el1");
+                second.setAttribute("class", "el2");
+                let type1 = this.pokemonData['types'][0]['type']['name']
+                let type2 = this.pokemonData['types'][1]['type']['name']
+                first.innerHTML = type1;
+                second.innerHTML = type2;
+                typesInfo.innerHTML = primeiro + " | " + second;
+                div1.classList.add("hide");
+                div1.classList.remove("show");
+              }
+              // if (this.pokemonData.length != 0) { 
+                // div1.classList.add("hide");
+                // div1.classList.remove("show");
                 // title.forEach(el => {
                 //   el.classList.add("show");
                 //   el.classList.remove("hide");
                 // });
-              }
+              // }
             } else if (res.status == 404) { //se o pokemon não existe
               // this.pokemonData.name = 'Pokemon não encontrado';
               // this.pokemonData.id = 'Error 404';
@@ -109,19 +132,27 @@
         },
 
         foward() {
-          this.id++;
-          this.pokemon = this.id;
-          document.querySelector('.mainImg').src = ''
-          document.querySelector('.typesInfo').innerHTML = ''
-          this.getApiData();
+          if(this.id == 905) {
+            this.id = 0
+          }else{
+            this.id++
+            this.pokemon = this.id;
+            document.querySelector('.mainImg').src = ''
+            document.querySelector('.typesInfo').innerHTML = ''
+            this.getApiData();
+          }
         },
 
         previous() {
-          this.id--
-          this.pokemon = this.id;
-          document.querySelector('.mainImg').src = ''
-          document.querySelector('.typesInfo').innerHTML = ''
-          this.getApiData();
+          if(this.id == 1) {
+            this.id = 906
+          }else{
+            this.id--
+            this.pokemon = this.id;
+            document.querySelector('.mainImg').src = ''
+            document.querySelector('.typesInfo').innerHTML = ''
+            this.getApiData();
+          }
         }
       },
 
