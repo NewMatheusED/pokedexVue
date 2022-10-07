@@ -17,6 +17,7 @@
       </div><!--flexInfo-->
       <img class='mainImg'/>
       <div class="typesInfo"></div>
+      <div class="description"></div>
       
       <button v-bind:class="(pokemonData.length == 0) ? 'hide' : 'show'" class="btn btn-secondary" style="margin-top: 10px; margin-bottom: 20px" @click="__repeat">Pesquisar novamente</button>
     </div><!--main-->
@@ -51,6 +52,7 @@
           const btn1 = document.querySelector('.btn-primary');
           const btn2 = document.querySelector('.btn-secondary');
           const typesInfo = document.querySelector('.typesInfo');
+          const description = document.querySelector('.description');
           // const title = document.querySelectorAll('.title');
 
           this.pokemonData = [];
@@ -78,6 +80,8 @@
               img.src = data['sprites']['versions']['generation-v']['black-white']['animated']['front_default'];
               input.classList.add("hide");
 
+              description.innerHTML = `HP: ${this.pokemonData['stats'][0]['base_stat']} <br /> Attack: ${this.pokemonData['stats'][1]['base_stat']} <br /> Defense: ${this.pokemonData['stats'][2]['base_stat']} <br /> Special Attack: ${this.pokemonData['stats'][3]['base_stat']} <br /> Special Defense: ${this.pokemonData['stats'][4]['base_stat']} <br /> Speed: ${this.pokemonData['stats'][5]['base_stat']}`
+
               if(this.pokemonData['types'].length == 1) {
                 document.createElement("div1")
                 let type1 = this.pokemonData['types'][0]['type']['name']
@@ -88,15 +92,9 @@
               }
 
               if(this.pokemonData['types'].length == 2) {
-                let first = document.createElement("div");
-                let second = document.createElement("div");
-                first.setAttribute("class", "el1");
-                second.setAttribute("class", "el2");
                 let type1 = this.pokemonData['types'][0]['type']['name']
                 let type2 = this.pokemonData['types'][1]['type']['name']
-                first.innerHTML = type1;
-                second.innerHTML = type2;
-                typesInfo.innerHTML = primeiro + " | " + second;
+                typesInfo.innerHTML = type1 + " | " + type2;
                 div1.classList.add("hide");
                 div1.classList.remove("show");
               }
