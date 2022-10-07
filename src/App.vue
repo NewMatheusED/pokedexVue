@@ -77,7 +77,11 @@
               this.pokemonData = data ;
               this.pokemon = '';
               this.id = this.pokemonData['id'];
-              img.src = data['sprites']['versions']['generation-v']['black-white']['animated']['front_default'];
+              if(data['sprites']['versions']['generation-v']['black-white']['animated']['front_default'] != null) {
+                img.src = data['sprites']['versions']['generation-v']['black-white']['animated']['front_default'];
+              }else{
+                img.src = data['sprites']['other']['official-artwork']['front_default'];
+              }
               input.classList.add("hide");
 
               description.innerHTML = `HP: ${this.pokemonData['stats'][0]['base_stat']} <br /> Attack: ${this.pokemonData['stats'][1]['base_stat']} <br /> Defense: ${this.pokemonData['stats'][2]['base_stat']} <br /> Special Attack: ${this.pokemonData['stats'][3]['base_stat']} <br /> Special Defense: ${this.pokemonData['stats'][4]['base_stat']} <br /> Speed: ${this.pokemonData['stats'][5]['base_stat']}`
