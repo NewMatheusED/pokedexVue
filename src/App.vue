@@ -45,20 +45,20 @@
         },
 
         async getApiData() {
-          const div1 = document.querySelector('.loading');
-          const div2 = document.querySelector('.main');
+          const loading = document.querySelector('.loading');
+          // const div2 = document.querySelector('.main');
           const img = document.querySelector('.mainImg');
           const input = document.querySelector('.input');
-          const btn1 = document.querySelector('.btn-primary');
-          const btn2 = document.querySelector('.btn-secondary');
+          // const btn1 = document.querySelector('.btn-primary');
+          // const btn2 = document.querySelector('.btn-secondary');
           const typesInfo = document.querySelector('.typesInfo');
           const description = document.querySelector('.description');
           // const title = document.querySelectorAll('.title');
 
           this.pokemonData = [];
 
-          div1.classList.add("show");
-          div1.classList.remove("hide");
+          loading.classList.add("show");
+          loading.classList.remove("hide");
           // div2.classList.add("hide");
           // div2.classList.remove("show");
           // btn1.classList.add("hide");
@@ -77,21 +77,23 @@
               this.pokemonData = data ;
               this.pokemon = '';
               this.id = this.pokemonData['id'];
+
               if(data['sprites']['versions']['generation-v']['black-white']['animated']['front_default'] != null) {
                 img.src = data['sprites']['versions']['generation-v']['black-white']['animated']['front_default'];
               }else{
                 img.src = data['sprites']['other']['official-artwork']['front_default'];
               }
+
               input.classList.add("hide");
 
               description.innerHTML = `HP: ${this.pokemonData['stats'][0]['base_stat']} <br /> Attack: ${this.pokemonData['stats'][1]['base_stat']} <br /> Defense: ${this.pokemonData['stats'][2]['base_stat']} <br /> Special Attack: ${this.pokemonData['stats'][3]['base_stat']} <br /> Special Defense: ${this.pokemonData['stats'][4]['base_stat']} <br /> Speed: ${this.pokemonData['stats'][5]['base_stat']}`
 
               if(this.pokemonData['types'].length == 1) {
-                document.createElement("div1")
+                document.createElement("loading")
                 let type1 = this.pokemonData['types'][0]['type']['name']
                 typesInfo.innerHTML = type1;
-                div1.classList.add("hide");
-                div1.classList.remove("show");
+                loading.classList.add("hide");
+                loading.classList.remove("show");
                 
               }
 
@@ -99,8 +101,8 @@
                 let type1 = this.pokemonData['types'][0]['type']['name']
                 let type2 = this.pokemonData['types'][1]['type']['name']
                 typesInfo.innerHTML = type1 + " | " + type2;
-                div1.classList.add("hide");
-                div1.classList.remove("show");
+                loading.classList.add("hide");
+                loading.classList.remove("show");
               }
               // if (this.pokemonData.length != 0) { 
                 // div1.classList.add("hide");
