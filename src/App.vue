@@ -18,6 +18,7 @@
       <img class='mainImg'/>
       <div class="typesInfo"></div>
       <div class="description"></div>
+      <div class="evolution"></div>
       
       <button v-bind:class="(pokemonData.length == 0) ? 'hide' : 'show'" class="btn btn-secondary" style="margin-top: 10px; margin-bottom: 20px" @click="__repeat">Pesquisar novamente</button>
     </div><!--main-->
@@ -37,13 +38,6 @@
  
       methods: {
 
-        getColorType(type) {
-          switch (type) {
-            case 'grass': 
-
-          }
-        },
-
         async getApiData() {
           const loading = document.querySelector('.loading');
           // const div2 = document.querySelector('.main');
@@ -54,8 +48,7 @@
           const typesInfo = document.querySelector('.typesInfo');
           const description = document.querySelector('.description');
           // const title = document.querySelectorAll('.title');
-
-          this.pokemonData = [];
+          const evolution = document.querySelector('.evolution')
 
           loading.classList.add("show");
           loading.classList.remove("hide");
@@ -65,16 +58,28 @@
           // btn1.classList.remove("show");
 
           try {
+
             if(this.pokemon === '') {
               alert('Preencher campo')
               window.location.reload();
             }
+
             let name = this.pokemon
             const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+            const resEvol = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${name}/`)
 
             if(res.status == 200) { //se o pokemon existe
               const data = await res.json();
+              const resEvolve = await resEvol.json();
+              const evol = await fetch(resEvolve['evolution_chain']['url'])
+              const evolution = await evol.json();
+
+              if(evolution['chain']['evolves_to'].length > 0) { //caso o pokemon tenha evolução
+                console.log(evolution['chain']['evolves_to'][0]['species']['name'])
+              }
+
               this.pokemonData = data ;
+              // this.pokemonData += resEvolve
               this.pokemon = '';
               this.id = this.pokemonData['id'];
 
