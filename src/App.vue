@@ -48,7 +48,7 @@
           const typesInfo = document.querySelector('.typesInfo');
           const description = document.querySelector('.description');
           // const title = document.querySelectorAll('.title');
-          const evolution = document.querySelector('.evolution')
+          const evolutionDiv = document.querySelector('.evolution')
 
           loading.classList.add("show");
           loading.classList.remove("hide");
@@ -70,12 +70,21 @@
 
             if(res.status == 200) { //se o pokemon existe
               const data = await res.json();
-              const resEvolve = await resEvol.json();
-              const evol = await fetch(resEvolve['evolution_chain']['url'])
-              const evolution = await evol.json();
+              const result = await resEvol.json()
 
-              if(evolution['chain']['evolves_to'].length > 0) { //caso o pokemon tenha evolução
-                console.log(evolution['chain']['evolves_to'][0]['species']['name'])
+              if(result['evolution_chain'] !== null) {
+                  const evol = await fetch(result['evolution_chain']['url'])
+                  const evolution = await evol.json(); 
+
+                  if(evolution['chain']['evolves_to'].length > 0) { //caso o pokemon tenha evolução
+                    console.log(evolution['chain']['species']['name']) // primeira evolução
+                    console.log(evolution['chain']['evolves_to'][0]['species']['name']) //segunda evolução
+                    if(evolution['chain']['evolves_to'][0]['evolves_to'] !== null) {
+                      console.log(evolution['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'])  //terceira evolução
+                    }
+                  }
+              }else{
+                console.log('Pokemon sem evolução')
               }
 
               this.pokemonData = data ;
