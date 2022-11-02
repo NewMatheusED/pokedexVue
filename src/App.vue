@@ -18,7 +18,11 @@
       <img class='mainImg'/>
       <div class="typesInfo"></div>
       <div class="description"></div>
-      <div class="evolution"></div>
+      <!--<div v-for="(evolve) in setEvolutions" class="evolution">
+        <img v-bind:src="evolve.img" class="evolutionImg">
+        <h1 class="evolutionName">{{evolve.name}}</h1>
+        <p class="evolutionId">{{evolve.id}}</p>
+      </div> evolution-->
       
       <button v-bind:class="(pokemonData.length == 0) ? 'hide' : 'show'" class="btn btn-secondary" style="margin-top: 10px; margin-bottom: 20px" @click="__repeat">Pesquisar novamente</button>
     </div><!--main-->
@@ -33,6 +37,7 @@
         pokemonData: [],
         pokemon: '',
         id: 0,
+        evolutions: []
         }
       },  
  
@@ -49,6 +54,8 @@
           const description = document.querySelector('.description');
           // const title = document.querySelectorAll('.title');
           const evolutionDiv = document.querySelector('.evolution')
+          const evolutionName = document.querySelector('.evolutionName');
+          const evolutionImg = document.querySelector('.evolutionImg');
 
           loading.classList.add("show");
           loading.classList.remove("hide");
@@ -72,20 +79,25 @@
               const data = await res.json();
               const result = await resEvol.json()
 
-              if(result['evolution_chain'] !== null) {
-                  const evol = await fetch(result['evolution_chain']['url'])
-                  const evolution = await evol.json(); 
+              // if(result['evolution_chain'] !== null) {
+              //     const evol = await fetch(result['evolution_chain']['url'])
+              //     const evolution = await evol.json(); 
 
-                  if(evolution['chain']['evolves_to'].length > 0) { //caso o pokemon tenha evolução
-                    console.log(evolution['chain']['species']['name']) // primeira evolução
-                    console.log(evolution['chain']['evolves_to'][0]['species']['name']) //segunda evolução
-                    if(evolution['chain']['evolves_to'][0]['evolves_to'] !== null) {
-                      console.log(evolution['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'])  //terceira evolução
-                    }
-                  }
-              }else{
-                console.log('Pokemon sem evolução')
-              }
+              //     if(evolution['chain']['evolves_to'].length > 0) { //caso o pokemon tenha evolução
+              //       this.evolutions = [];
+              //       //console.log(evolution['chain']['species']['name'])  primeira evolução
+              //       this.evolutions.push(evolution['chain']['species']['name'])
+              //       //console.log(evolution['chain']['evolves_to'][0]['species']['name']) segunda evolução]
+              //       this.evolutions.push(evolution['chain']['evolves_to'][0]['species']['name'])
+              //       if(evolution['chain']['evolves_to'][0]['evolves_to'] === undefined) {return null}
+              //       else{
+              //         //console.log(evolution['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'])  terceira evolução
+              //         this.evolutions.push(evolution['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'])
+              //       }
+              //     }
+              // }else{
+              //   console.log('Pokemon sem evolução')
+              // }
 
               this.pokemonData = data ;
               // this.pokemonData += resEvolve
@@ -171,7 +183,26 @@
             document.querySelector('.typesInfo').innerHTML = ''
             this.getApiData();
           }
-        }
+        },
+
+        // async setEvolve(el) {
+        //   console.log(evolutions)
+        //   try{
+        //     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${el}`);
+        //     const evolve = await res.json();
+        //     return evolve;
+        //   }
+        //    catch(error) {
+        //     console.log(error)
+        //    }   
+        // },
+
+        // setEvolutions() {
+        //   return this.evolutions.map(el => {
+        //     setEvolve(el)
+        //   })
+        // }
+
       },
 
       creates() {
@@ -235,6 +266,10 @@
     margin-bottom: 50px;
 
    }
+
+   /* .evolution {
+
+   } */
 
    @keyframes spin {
     0% {
