@@ -18,11 +18,14 @@
       <img class='mainImg'/>
       <div class="typesInfo"></div>
       <div class="description"></div>
-      <!--<div v-for="(evolve) in setEvolutions" class="evolution">
-        <img v-bind:src="evolve.img" class="evolutionImg">
-        <h1 class="evolutionName">{{evolve.name}}</h1>
-        <p class="evolutionId">{{evolve.id}}</p>
-      </div> evolution-->
+      <h1 v-bind:class="(pokemonData.length == 0) ? 'hide' : 'show'" >Evolutions</h1>
+      <div class="flexEvolution">
+        <div class="evolution" v-for="(evolve, index) in evolutions" :key="index">
+            <img :src="getSpriteUrl(evolve.id)" @error="handleImageError" class="evolutionImg">
+            <h3 class="evolutionName">{{ evolve.name }}</h3>
+            <p class="evolutionId">Nº{{ evolve.id }}</p>
+        </div><!--evolution-->
+      </div><!--flexEvolution-->
       
       <button v-bind:class="(pokemonData.length == 0) ? 'hide' : 'show'" class="btn btn-secondary" style="margin-top: 10px; margin-bottom: 20px" @click="__repeat">Pesquisar novamente</button>
     </div><!--main-->
@@ -45,24 +48,13 @@
 
         async getApiData() {
           const loading = document.querySelector('.loading');
-          // const div2 = document.querySelector('.main');
           const img = document.querySelector('.mainImg');
           const input = document.querySelector('.input');
-          // const btn1 = document.querySelector('.btn-primary');
-          // const btn2 = document.querySelector('.btn-secondary');
           const typesInfo = document.querySelector('.typesInfo');
           const description = document.querySelector('.description');
-          // const title = document.querySelectorAll('.title');
-          const evolutionDiv = document.querySelector('.evolution')
-          const evolutionName = document.querySelector('.evolutionName');
-          const evolutionImg = document.querySelector('.evolutionImg');
 
           loading.classList.add("show");
           loading.classList.remove("hide");
-          // div2.classList.add("hide");
-          // div2.classList.remove("show");
-          // btn1.classList.add("hide");
-          // btn1.classList.remove("show");
 
           try {
 
@@ -79,28 +71,7 @@
               const data = await res.json();
               const result = await resEvol.json()
 
-              // if(result['evolution_chain'] !== null) {
-              //     const evol = await fetch(result['evolution_chain']['url'])
-              //     const evolution = await evol.json(); 
-
-              //     if(evolution['chain']['evolves_to'].length > 0) { //caso o pokemon tenha evolução
-              //       this.evolutions = [];
-              //       //console.log(evolution['chain']['species']['name'])  primeira evolução
-              //       this.evolutions.push(evolution['chain']['species']['name'])
-              //       //console.log(evolution['chain']['evolves_to'][0]['species']['name']) segunda evolução]
-              //       this.evolutions.push(evolution['chain']['evolves_to'][0]['species']['name'])
-              //       if(evolution['chain']['evolves_to'][0]['evolves_to'] === undefined) {return null}
-              //       else{
-              //         //console.log(evolution['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'])  terceira evolução
-              //         this.evolutions.push(evolution['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'])
-              //       }
-              //     }
-              // }else{
-              //   console.log('Pokemon sem evolução')
-              // }
-
               this.pokemonData = data ;
-              // this.pokemonData += resEvolve
               this.pokemon = '';
               this.id = this.pokemonData['id'];
 
@@ -138,6 +109,15 @@
                 //   el.classList.remove("hide");
                 // });
               // }
+
+              if (result["evolution_chain"] !== null) {
+                const evol = await fetch(result["evolution_chain"]["url"]);
+                const evolutionChainData = await evol.json();
+
+                this.evolutions = [];
+                this.collectEvolutions(evolutionChainData["chain"]);
+              }
+
             } else if (res.status == 404) { //se o pokemon não existe
               // this.pokemonData.name = 'Pokemon não encontrado';
               // this.pokemonData.id = 'Error 404';
@@ -183,6 +163,25 @@
             document.querySelector('.typesInfo').innerHTML = ''
             this.getApiData();
           }
+        },
+
+        collectEvolutions(chain) {
+          const currentEvolution = {
+            name: chain["species"]["name"],
+            id: chain["species"]["url"].split("/").slice(-2, -1)[0],
+          };
+          this.evolutions.push(currentEvolution);
+
+          if (chain["evolves_to"].length > 0) {
+            for (const evolutionData of chain["evolves_to"]) {
+              this.collectEvolutions(evolutionData);
+            }
+          }
+        },
+
+        getSpriteUrl(pokemonName) {
+          // Gerar a URL do gif pixelado do Pokémon
+          return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemonName}.gif`;
         },
 
         // async setEvolve(el) {
@@ -264,9 +263,21 @@
     display: flex;
     align-items: end;
     margin-bottom: 50px;
-
    }
 
+   .flexEvolution {
+    display: flex;
+   }
+
+   .evolution {
+    text-align: center;
+    margin: 0 50px;
+   }
+
+   .evolutionImg {
+    width: 80px;
+    height: 80px;
+   }
    /* .evolution {
 
    } */
